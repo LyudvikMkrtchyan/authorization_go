@@ -1,0 +1,12 @@
+{
+    "db_host": "localhost",
+    "db_port": 3306,
+    "db_name": "auth_db",
+    "db_user": "root",
+    "db_password": "secret",
+    "jwt_secret": "my_jwt_secret",
+    "jwt_ttl_seconds": 3600,
+    "refresh_ttl_seconds": 604800,
+    "token_map_max": 1000,
+    "warning_log_dir": "./warnings"
+}
