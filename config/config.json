@@ -8,5 +8,6 @@
     "jwt_ttl_seconds": 3600,
     "refresh_ttl_seconds": 604800,
     "token_map_max": 1000,
-    "warning_log_dir": "./warnings"
+    "warning_log_dir": "./warnings",
+    "port": 8080
 }

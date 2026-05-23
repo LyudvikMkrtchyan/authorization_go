@@ -17,6 +17,7 @@ type Config struct {
 	RefreshTTLSeconds int    `json:"refresh_ttl_seconds"`
 	TokenMapMax       int    `json:"token_map_max"`
 	WarningLogDir     string `json:"warning_log_dir"`
+	Port              int    `json:"port"`
 }
 
 type ConfigLoader interface {

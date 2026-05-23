@@ -8,7 +8,11 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var errInvalidCredentials = errors.New("invalid credentials")
+var (
+	ErrUserAlreadyExists   = errors.New("user already exists")
+	ErrInvalidCredentials  = errors.New("invalid credentials")
+	ErrInvalidRefreshToken = errors.New("invalid or expired refresh token")
+)
 
 type LoginResult struct {
 	UserID       uint64 `json:"user_id"`
@@ -38,7 +42,7 @@ func (s *AuthServiceImpl) Register(login string, password string) error {
 		return fmt.Errorf("Register: %w", err)
 	}
 	if exists {
-		return errors.New("user already exists")
+		return ErrUserAlreadyExists
 	}
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
@@ -55,11 +59,11 @@ func (s *AuthServiceImpl) Register(login string, password string) error {
 func (s *AuthServiceImpl) Login(login string, password string) (*LoginResult, error) {
 	user, err := s.db.GetUserByLogin(login)
 	if err != nil {
-		return nil, errInvalidCredentials
+		return nil, ErrInvalidCredentials
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)); err != nil {
-		return nil, errInvalidCredentials
+		return nil, ErrInvalidCredentials
 	}
 
 	jwtToken, err := GenerateJWT(user.ID, s.cfg.JWTSecret, s.cfg.JWTTTLSeconds)
@@ -83,7 +87,7 @@ func (s *AuthServiceImpl) Login(login string, password string) (*LoginResult, er
 func (s *AuthServiceImpl) RefreshToken(refreshToken string) (*LoginResult, error) {
 	session, err := s.tokenManager.GetSessionByRefresh(refreshToken)
 	if err != nil {
-		return nil, errors.New("invalid or expired refresh token")
+		return nil, ErrInvalidRefreshToken
 	}
 
 	if err := s.tokenManager.DeleteSession(refreshToken); err != nil {
