@@ -29,6 +29,7 @@ func (s *HTTPServer) registerRoutes() {
 	http.HandleFunc("/register", s.handleRegister)
 	http.HandleFunc("/login", s.handleLogin)
 	http.HandleFunc("/refresh", s.handleRefresh)
+	http.Handle("/", http.FileServer(http.Dir("front")))
 }
 
 func writeJSON(w http.ResponseWriter, status int, v any) {
