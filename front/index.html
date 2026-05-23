@@ -8,29 +8,32 @@
 </head>
 <body>
 
-    <div id="login-view">
+    <div id="login-view" class="card">
         <h2>Login</h2>
+        <p class="error-msg" id="login-error"></p>
         <form id="login-form">
             <input type="text" id="login-username" placeholder="Login" required>
             <input type="password" id="login-password" placeholder="Password" required>
             <button type="submit">Login</button>
         </form>
-        <p>Don't have an account? <a href="#" id="go-to-register">Register</a></p>
+        <p class="toggle-link">Don't have an account? <a href="#" id="go-to-register">Register</a></p>
     </div>
 
-    <div id="register-view" style="display:none">
+    <div id="register-view" class="card">
         <h2>Register</h2>
+        <p class="error-msg" id="register-error"></p>
+        <p class="success-msg" id="register-success"></p>
         <form id="register-form">
             <input type="text" id="register-username" placeholder="Login" required>
             <input type="password" id="register-password" placeholder="Password" required>
             <button type="submit">Register</button>
         </form>
-        <p>Already have an account? <a href="#" id="go-to-login">Login</a></p>
+        <p class="toggle-link">Already have an account? <a href="#" id="go-to-login">Login</a></p>
     </div>
 
-    <div id="dashboard-view" style="display:none">
+    <div id="dashboard-view" class="card">
         <h2>Welcome, user <span id="dashboard-user-id"></span></h2>
-        <button id="logout-btn">Logout</button>
+        <button id="logout-btn" class="btn-logout">Logout</button>
     </div>
 
     <script src="js/api.js"></script>
