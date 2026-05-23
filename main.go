@@ -1,9 +1,6 @@
 package main
 
-import (
-	"fmt"
-	"log"
-)
+import "log"
 
 func main() {
 	loader := &JSONConfigLoader{}
@@ -11,5 +8,23 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Config loaded: db=%s@%s:%d/%s\n", cfg.DBUser, cfg.DBHost, cfg.DBPort, cfg.DBName)
+
+	logger := NewFileWarningLogger(cfg.WarningLogDir)
+
+	mysqlDB, err := NewMySQLDatabase(cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer mysqlDB.Close()
+
+	tokenManager, err := NewMySQLTokenManager(cfg, mysqlDB.db, logger)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	authService := NewAuthService(mysqlDB, tokenManager, cfg)
+
+	server := NewHTTPServer(authService, cfg)
+	log.Printf("Server starting on port %d", cfg.Port)
+	log.Fatal(server.Run())
 }
